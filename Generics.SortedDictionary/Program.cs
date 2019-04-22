@@ -7,21 +7,16 @@ namespace Generics.SortedDictionary
     {
         static void Main(string[] args)
         {
-            var people = new SortedDictionary<string, SortedSet<Person>>();
-            people.Add("scienct", new SortedSet<Person>(new PersonComparer()));
-            people["scienct"].Add(new Person("Swagat"));
-            people["scienct"].Add(new Person("Rakesh"));
-            people["scienct"].Add(new Person("Abinash"));
-            people["scienct"].Add(new Person("Abinash"));
+            var people = new SortedDepartmentCollection();
+            people.Add("scienct", "Swagat")
+                  .Add("scienct", "Rakesh")
+                  .Add("scienct", "Abinash")
+                  .Add("scienct", "Abinash");
 
-
-            people.Add("math", new SortedSet<Person>(new PersonComparer()));
-            people["math"].Add(new Person("Naibedya"));
-            people["math"].Add(new Person("Disha"));
-            people["math"].Add(new Person("Gayatri"));
-            people["math"].Add(new Person("Gayatri"));
-
-
+            people.Add("math", "Naibedya")
+                  .Add("math", "Disha")
+                  .Add("math", "Gayatri")
+                  .Add("math", "Gayatri");
             foreach (var d in people)
             {
                 Console.WriteLine($"{d.Key}");
@@ -30,9 +25,19 @@ namespace Generics.SortedDictionary
                     Console.WriteLine($"\t{item.FirstName}");
                 }
             }
-
             Console.ReadKey();
+        }
+    }
 
+    public class SortedDepartmentCollection : SortedDictionary<string, SortedSet<Person>>
+    {
+        public SortedDepartmentCollection Add(string dept, string name)
+        {
+            if (!this.ContainsKey(dept))
+                this.Add(dept, new SortedSet<Person>(new PersonComparer()));
+
+            this[dept].Add(new Person(name));
+            return this;
         }
     }
     public class PersonComparer : IEqualityComparer<Person>, IComparer<Person>
